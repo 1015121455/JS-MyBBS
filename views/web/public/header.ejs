@@ -1,0 +1,31 @@
+<nav class="navbar navbar-inverse navbar-fixed-top" style="background-color: #444444">
+    <div class="container navList" id="nav-top">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a href href="/" class="logo"><img src="/images/jsLogo.png" alt="logo"></a>
+            <a class="navbar-brand" href="/">JS中文社区</a>
+            <form class="navbar-form navbar-left" action="/search" method="GET">
+                <div class="form-group" id="searchInput">
+                    <i class="glyphicon glyphicon-search hidden-xs" style="margin-right: -30px;color:#555"></i>
+                    <input type="text" name="keyWord" class="form-control">
+                </div>
+            </form>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+               <!-- <li><a href="/">首页</a></li>-->
+                <% if(!logined){%>
+                <li><a href="/users/login">登录</a></li>
+                <li><a href="/users/reg">注册</a></li>
+                <%}else {%>
+                <li><a href="/users/userSetting">设置</a></li>
+                <li><a href="/users/loginOut">退出</a></li>
+                <%}%>
+            </ul>
+        </div>
+    </div>
+</nav>

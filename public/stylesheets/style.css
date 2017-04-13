@@ -1,0 +1,316 @@
+*{
+    box-sizing: border-box;
+}
+body{
+    position: relative;
+    width: 100%;
+    min-height: 1080px;
+    height:auto;
+    margin: 0;
+    font-family: 微软雅黑;
+    padding-top:50px;
+    padding-bottom:200px;
+}
+p{
+    margin: 0;
+    padding: 0;
+}
+a{
+    text-decoration: none;
+}
+img{
+    border-radius: 3px;
+}
+.clear{
+    clear: both;
+}
+.logo{
+    padding: 10px;
+    float: left;
+}
+.logo img{
+    width: 30px;
+    height: 30px;
+}
+.navList{
+    display: flex;
+    justify-content: space-between;
+}
+#nav-top a{
+    color: #ccc;
+}
+#nav-top a:hover{
+    color: #fff;
+}
+
+/*搜索框*/
+#searchInput i{
+    top: 3px;
+}
+{
+
+}
+#searchInput input{
+    text-indent: 2em;
+    border-radius: 5px;
+    border: 1px solid #888888;
+    background-color: #888888;
+}
+#searchInput input{
+    width: 200px;
+}
+/*返回顶部*/
+.back-to-top{
+    position: fixed;
+    right: 50px;
+    bottom: 150px;
+    font-size: 20px;
+    line-height: 50px;
+    width: 50px;
+    height: 50px;
+    text-align: center;
+    background-color: #596B7D;
+    color: #fff;
+    border-radius: 2px;
+    cursor:pointer;
+    z-index:999;
+}
+/*左边模块*/
+.leftbody {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    margin: 20px 10px;
+}
+.leftbody section{
+    padding: 0;
+    margin:0 10px;
+}
+.leftbody h3{
+    font-size:14px;
+    margin:0;
+    margin-bottom:20px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    padding: 15px;
+    color: #999999;
+    background-color: #F6F6F6;
+}
+.leftbody h3 a{
+    color: #80BD01;
+}
+/*首页分类链接的样式*/
+#selectName{
+    margin: 0;
+}
+#selectName a{
+    padding: 5px;
+    margin:0px 10px;
+    border-radius:3px;
+    color: #5CB85C;
+}
+#selectName a:hover{
+    text-decoration: none;
+}
+#selectName .active{
+    color: #fff;
+    background-color: #5CB85C;
+    text-decoration: none;
+}
+.pagingActive{
+    color: #5CB85C;
+    background: red;
+}
+#top10{
+    margin:5px 0;
+}
+#top10 span{
+    display: inline-block;
+    width: 30px;
+    margin-left:20px;
+}
+/*文章列表*/
+.articleList {
+    padding: 10px;
+    border-bottom:1px solid #eee;
+}
+.articleList a{
+    color:#778087 ;
+}
+.leftbody main{
+    background-color: white;
+    border-radius: 5px;
+    padding-bottom:10px;
+    margin-bottom:10px;
+}
+.articleList:hover{
+    background-color: #F6F6F6;
+}
+.numBar{
+    display: inline-block;
+    text-align: center;
+    width: 60px;
+}
+#com .zan{
+    float: right;
+    margin:10px 30px;
+    color: #999;
+    font-size: 18px;
+}
+#com  a.isZan{
+    color: #E97146;
+}
+.selectBar{
+
+    padding: 2px;
+    margin:0 5px;
+    font-size: 12px;
+    border-radius: 2px;
+    background-color:#E5E5E5;
+    color: #999999;
+}
+/*文章详情页面*/
+.articleContent>div{
+    background-color: white;
+    border-radius: 5px;
+    margin-bottom:10px;
+}
+.articleContent p{
+    margin: 0;
+    padding: 0;
+}
+.articleContent section {
+     padding: 20px;
+ }
+/*文章内容部分格式设置*/
+.arContent {
+    letter-spacing: 0.05em;
+    line-height: 2em;
+}
+/*文章标题*/
+.articleTitle h2{
+    margin: 0;
+    padding: 20px;
+    padding-bottom:0;
+}
+.articleTitle ul {
+    margin: 0;
+    padding:20px;
+    color: #838383;
+    border-bottom:1px solid #eee;
+}
+.articleTitle ul li{
+    float: left;
+    margin:0 10px;
+}
+/*文章留言部分*/
+.articleComments>div{
+    padding: 10px;
+    border-bottom:1px solid #eee;
+}
+
+/*用户信息页面*/
+.otherUserMessage>div{
+    padding: 10px;
+}
+.otherUserMessage>h3{
+    margin-bottom:0px;
+}
+/*修改和删除按钮*/
+#settingBar a{
+    padding-top:10px;
+    margin: 10px;
+    font-size: 20px;
+    color:#838383;
+}
+#settingBar a:hover{
+    color: #ccc;
+}
+
+/*更换头像的表单*/
+#upupup{
+    position: relative;
+}
+#upload {
+    width: 100px;
+    position: absolute;
+    top: 50px;
+    right: 50px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+#upload input[type=file]{
+    display: none;
+}
+#upload img {
+    cursor:pointer;
+    border: 1px solid #787878;
+    margin: 10px 0;
+}
+/*表单的样式*/
+form[name="regForm"],form[name="loginForm"],form[name="settingForm"],form[name="rePsdForm"],form[name="creatArticleForm"],form[name="addCommentsForm"]{
+    background-color: white;
+    border-radius: 5px;
+    padding-bottom:50px;
+    margin-bottom:10px;
+}
+/*form[name="regForm"] h3,form[name="loginForm"] h3,form[name="settingForm"] h3,form[name="rePsdForm"] h3,form[name="creatArticleForm"] h3{
+    background-color: #F6F6F6;
+    font-size:14px;
+    margin: 0px 0px 20px 0;
+    padding: 10px;
+}*/
+form[name="regForm"] div,form[name="loginForm"] div{
+    margin-left:100px;
+    width: 400px;
+}
+/*页面右边的样式*/
+.rightmain{
+    width: 300px;
+    background-color: white;
+    border-radius: 5px;
+    margin-bottom: 30px;
+    padding-bottom:20px;
+}
+.rightmain h4{
+    font-size:14px;
+    margin:10px;
+}
+.rightmain li{
+    margin: 10px;
+}
+.rightmain p{
+    margin: 0;
+    padding: 0;
+    width: 200px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.rightmain a{
+    color:#778087 ;
+    display: inline-block;
+    margin: 5px 10px;
+}
+.rightmain a:hover{
+    text-decoration: none;
+}
+footer{
+    width: 100%;
+    height: 100px;
+    position: absolute;
+    bottom: 0;
+    background-color: white;
+}
+/*页面适应的媒体查询*/
+@media (max-width: 992px){
+    .leftbody section:nth-of-type(2) {
+        display: none;
+    }
+    /*form[name="regForm"] div{
+        margin-left:0px;
+        width: 400px;
+    }*/
+}

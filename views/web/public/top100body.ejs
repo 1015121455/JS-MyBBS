@@ -1,0 +1,52 @@
+<div class="leftbody" ng-controller="top100Ctrl">
+    <section class="col-md-8 col-sm-12 col-xs-12 otherUser">
+        <main class="otherUserMessage" ng-cloak>
+            <!--用户信息-->
+            <h3><a href="/">主页</a>/</h3>
+            <table class="table table-striped">
+                <tr>
+                    <th>#</th>
+                    <th>用户名</th>
+                    <th>积分</th>
+                    <th>主题数</th>
+                    <th>评论数</th>
+                </tr>
+                <tr ng-repeat="top in tops">
+                    <td>{{ top.No }}</td>
+                    <td><a href="/users/otherUser?author={{ top.userName }}"><img ng-src="{{ top.logo }}" width="30px" height="30px" alt="#">&#x3000;{{ top.userName }}</a></td>
+                    <td>{{ top.jifen }}</td>
+                    <td>{{ top.articleNum }}</td>
+                    <td>{{ top.commentsNum }}</td>
+                </tr>
+            </table>
+
+        </main>
+
+    </section>
+
+
+    <section>
+        <%- include rightmain %>
+    </section>
+</div>
+<script>
+    var webApp = angular.module('webApp',[]);
+    webApp.controller('top100Ctrl',function ($scope,$http) {
+        $scope.no = 1;
+        //获取用户的信息并挂到$scope上
+        $http.get('/users/userInfo?uid=' + '<%= userInfoId %>')
+                .success(function(result){
+                    $scope.rightData = result;
+                });
+        //积分榜 top100 用户
+        $http({
+            method:'GET',
+            url:'/getTop100'
+        }).success(function (data) {
+            data.forEach(function (dataNum) {
+                dataNum.No = $scope.no++;
+            })
+            $scope.tops = data;
+        });
+    })
+</script>

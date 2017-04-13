@@ -1,0 +1,37 @@
+<div class="leftbody" ng-controller="searchCtrl">
+    <section class="col-md-8 col-sm-12 col-xs-12">
+        <h3><a href="/">主页</a>/ 搜索结果</h3>
+        <main>
+            <% if ( noResult ){%>
+            <div>
+                <p style="padding: 50px;">对不起，没有您搜索的话题标题...</p>
+            </div>
+            <%}%>
+            <% posts.forEach(function (post,index) {%>
+            <div class="articleList">
+                <a href="/users/otherUser?author=<%= post.author%>"><img src="<%= post.users.logo %>" width="30px" height="30px"></a>
+                <span class="numBar"><span class="text-primary">&#x3000; <%- post.comments.length %></span>/<span class="text-muted"><%= post.pv%>&#x3000;</span></span>
+                <span class="selectBar"><%= post.selectName %></span>
+                <a href="/users/articleContent?_id=<%= post._id %>"><%= post.title %></a>
+                <div class="clear"></div>
+            </div>
+            <%})%>
+        </main>
+    </section>
+    <section>
+        <%- include rightmain%>
+    </section>
+</div>
+<script>
+
+    var webApp = angular.module('webApp',[]);
+    webApp.controller('searchCtrl',function ($scope,$http) {
+        //查询用户的信息
+        if( '<%= userInfo %>' ){
+            $http.get('/users/userInfo?uid=' + '<%= userInfoId %>')
+                    .success(function(result){
+                        $scope.rightData = result;
+                    });
+        }
+    })
+</script>

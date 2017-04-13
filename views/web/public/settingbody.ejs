@@ -1,0 +1,158 @@
+<div class="leftbody" ng-controller="settingCtrl">
+    <section class="col-md-8 col-sm-12 col-xs-12" >
+        <div id="upupup">
+            <form class="form-horizontal" name="settingForm" ng-submit="processForm(settingForm.$valid)" novalidate>
+                <h3><a href="/">主页</a>/设置 &nbsp;<small class="text-danger hide" id="errorInfo">修改出现错误</small></h3>
+                <div class="form-group">
+                    <label for="userName" class="col-sm-2 col-xs-8 control-label">用户名</label>
+                    <div class="col-sm-6 col-xs-8">
+                        <input type="text" ng-cloak class="form-control" name="userName" id="userName" ng-model="formData.userName" disabled>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="email" class="col-sm-2 col-xs-8 control-label">电子邮箱</label>
+                    <div class="col-sm-6 col-xs-8">
+                        <input type="text" ng-cloak class="form-control" name="email" id="email" ng-model="formData.email"  disabled>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="website" class="col-sm-2 col-xs-8 control-label">个人网站</label>
+                    <div class="col-sm-6 col-xs-8">
+                        <input type="text" class="form-control" name="website" id="website" ng-model="formData.website"  ng-pattern="/^[http://]?([\w-]+\.)+[\w-]+[\w-]$/" ng-maxlength="20">
+                        <label ng-cloak for="inputError" class="control-label text-danger" ng-show="settingForm.website.$invalid && !settingForm.website.$pristine"><i class="glyphicon glyphicon-exclamation-sign"></i>网站格式不正确</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="city" class="col-sm-2 col-xs-8 control-label">所在城市</label>
+                    <div class="col-sm-6 col-xs-8">
+                        <input type="text" ng-cloak class="form-control" name="city" id="city" ng-model="formData.city" ng-minlength="2" ng-maxlength="12">
+                        <label ng-cloak for="inputError" class="control-label text-danger" ng-show="settingForm.city.$invalid && !settingForm.city.$pristine"><i class="glyphicon glyphicon-info-sign"></i> 0-12个非特殊字符</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="qq" class="col-sm-2 col-xs-8 control-label">QQ</label>
+                    <div class="col-sm-6 col-xs-8">
+                        <input type="text" ng-cloak class="form-control" name="qq" id="qq" ng-pattern="/^[1-9][0-9]{4,11}$/" ng-minlength="5" ng-maxlength="13" ng-model="formData.qq">
+                        <label ng-cloak for="inputError" class="control-label text-danger" ng-show="settingForm.qq.$invalid && !settingForm.qq.$pristine"><i class="glyphicon glyphicon-exclamation-sign"></i>QQ号的格式不正确</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="comments" class="col-sm-2  col-xs-8 control-label">个性签名</label>
+                    <div class="col-sm-6 col-xs-8">
+                        <textarea class="form-control" name="comments" id="comments" rows="5" ng-model="formData.motto"></textarea>
+                        <label ng-cloak for="inputError" class="control-label text-danger" ng-show="settingForm.comments.$invalid && !settingForm.comments.$pristine"><i class="glyphicon glyphicon-info-sign"></i>请填写正确的介绍</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button class="btn btn-success">保存设置</button>
+                    </div>
+                </div>
+            </form>
+            <div id="upload">
+                <img src="/images/add.jpg" alt="" width="50px" height="50px">
+                <form method="post" action="/users/upload" enctype="multipart/form-data">
+                    <input type="file" name="photo">
+                    <input type="submit" class="btn btn-info" value="更换头像">
+                </form>
+            </div>
+        </div>
+        <form name="rePsdForm" class="form-horizontal" ng-submit="rePsdFormfun(rePsdForm.$valid)" novalidate>
+            <h3>更改密码 &nbsp;<small class="text-danger hide" id="errorPsd">当前密码错误！</small></h3>
+            <div class="form-group">
+                <label for="userPassword" class="col-sm-2 control-label">当前密码</label>
+                <div class="col-sm-6">
+                    <input type="password" class="form-control" id="userPassword" name="password"placeholder="请输入当前密码" ng-pattern="/[?!a-zA-Z0-9_]{6,16}/" ng-maxlength="16" ng-model="rePsdFormData.password" required>
+                    <label ng-cloak for="inputError" class="control-label text-danger" ng-show="rePsdForm.password.$invalid && !rePsdForm.password.$pristine"><i class="glyphicon glyphicon-exclamation-sign"></i>6-16位，只能包含字母数字下划线</label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="newPassword" class="col-sm-2 control-label">新密码</label>
+                <div class="col-sm-6">
+                    <input type="password" class="form-control" id="newPassword" name="newPassword"placeholder="请输入新密码" ng-pattern="/[?!a-zA-Z0-9_]{6,16}/" ng-maxlength="16" ng-model="rePsdFormData.newPassword" required>
+                    <label ng-cloak for="inputError" class="control-label text-danger" ng-show="rePsdForm.newPassword.$invalid && !rePsdForm.newPassword.$pristine"><i class="glyphicon glyphicon-exclamation-sign"></i>6-16位，只能包含字母数字下划线</label>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button class="btn btn-success" ng-disabled="rePsdForm.$invalid">更改密码</button>
+                </div>
+            </div>
+        </form>
+    </section>
+    <section>
+        <%- include rightmain%>
+    </section>
+</div>
+<script>
+    var webApp = angular.module('webApp',[]);
+    webApp.controller('settingCtrl',function ($scope,$http) {
+        $scope.targetId = "<%= userInfo._id %>";
+        if($scope.targetId){
+            //查询用户的信息
+            $http.get('/users/userInfo?uid=' + $scope.targetId)
+                    .success(function(result){
+                        $scope.formData = result;
+                        $scope.rightData = result;
+                    })
+        };
+        $scope.processForm = function (isVaild) {
+            if(isVaild){
+                $http({
+                    method:'POST',
+                    url:'/users/doUserSetting',
+                    data:$.param($scope.formData),
+                    headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+                }).success(function (data) {
+                    if(data === 'success'){
+                        alert('修改信息成功')
+                    } else {
+                        $('#errorInfo').removeClass('hide').text(data);
+                    }
+                })
+            } else {
+                alert('输入有误！');
+            }
+        }
+        $scope.rePsdFormfun = function (isVaild) {
+            if(isVaild){
+                //如果表单内容格式正确
+                $http({
+                    method:'POST',
+                    url:'/users/rePsd',
+                    data:$.param($scope.rePsdFormData),
+                    headers:{'Content-Type':'application/x-www-form-urlencoded'}
+                }).success(function (data) {
+                    if(data === 'success'){
+                        alert('密码修改成功');
+                    } else {
+                        $('#errorPsd').removeClass('hide').text(data);
+                    }
+                })
+            } else {
+                alert('输入有误！');
+            }
+        }
+    });
+    $(function () {
+        $('#upload').on('click','img',function () {
+            $('#upload input[type=file]').click();
+        });
+        $('#upload').on('change','input[type=file]',function () {
+            // 获取一个DOM对象
+            // 取出所上传的文件
+            var file = $(this)[0].files[0];
+            console.log(file.type);
+            if (file.type == 'image/jpeg' || file.type =='image/gif' || file.type =='image/png') {
+                //是图片
+                console.log(file);
+                $('#upload img').attr('src',URL.createObjectURL(file));
+            } else{
+                //是其他的文件
+                alert('只能上传jpg/png/gif格式的图片');
+            }
+
+        });
+    });
+</script>

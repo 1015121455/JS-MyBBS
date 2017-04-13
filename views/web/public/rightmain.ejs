@@ -1,0 +1,40 @@
+<% if(!logined) {%>
+<div class="rightmain">
+    <h3>关于</h3>
+    <h4>JS专业中文社区</h4>
+    <h4>在这里你可以：</h4>
+    <ul>
+        <li>向别人提出你遇到的问题</li>
+        <li>帮助遇到问题的人</li>
+        <li>分享自己的知识</li>
+        <li>和其它人一起进步</li>
+    </ul>
+</div>
+<%} else {%>
+<div class="rightmain">
+    <h3>个人信息</h3>
+    <a href="/users/otherUser?author=<%= userInfo.userName %>"><img style="width: 50px;height: 50px;" src="<%= userInfo.logo %>" alt="用户头像">&#x3000;<%= userInfo.userName%></a>
+    <h4 ng-cloak>积分：{{ rightData.jifen }}</h4>
+    <h4 ng-cloak>" {{ rightData.motto }}"</h4>
+</div>
+<div class="rightmain" style="padding-bottom: 0;">
+    <a href="/users/creatArticle" class="btn btn-success" style="color: white">发布话题</a>
+</div>
+<%}%>
+<div class="rightmain" ng-cloak ng-show="tab">
+    <h3>积分榜 <a href="top100"> TOP 100>> </a> </h3>
+    <div ng-repeat=" top in tops" id="top10">
+        <span>{{ top.jifen }}</span>&#x3000;<a href="/users/otherUser?author={{ top.userName }}">{{ top.userName }}</a>
+    </div>
+</div>
+<div class="rightmain" ng-cloak ng-show="createArticle">
+    <h3>Markdown 语法参考</h3>
+    <ul style="list-style: none;padding: 0;">
+        <li>### 单行的标题</li>
+        <li>`console.log('行内代码')`</li>
+        <li>```js\n code \n``` 标记代码块</li>
+        <li>[内容](链接)</li>
+        <li>![文字说明](图片链接)</li>
+        <li><a href="https://segmentfault.com/markdown">Markdown 文档</a></li>
+    </ul>
+</div>

@@ -1,0 +1,67 @@
+<div class="leftbody" ng-controller="creatArticleCtrl">
+    <section class="col-md-8 col-sm-12 col-xs-12" >
+        <form class="form-horizontal" name="creatArticleForm" ng-submit="creatArticleSub(creatArticleForm.$valid)" novalidate>
+            <h3><a href="/">主页</a>/发布话题 &nbsp;<small class="text-danger hide" id="errorInfo">提交内容出现错误</small></h3>
+            <div class="form-group">
+                <div class="col-sm-6 col-sm-offset-1">
+                    <label class="control-label">选择板块：</label>
+                    <select class="form-control" ng-model="formData.selectName" ng-options="ty.id as ty.name for ty in names" required></select>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-6 col-sm-offset-1">
+                    <input type="text" ng-cloak class="form-control" name="title" id="title"  ng-minlength="10" ng-model="formData.title" placeholder="标题字数十个以上">
+                    <label ng-cloak for="inputError" class="control-label text-danger" ng-show="creatArticleForm.title.$invalid && !creatArticleForm.title.$pristine"><i class="glyphicon glyphicon-exclamation-sign"></i>标题字数十个以上</label>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-6 col-sm-offset-1">
+                    <textarea class="form-control" name="content" id="content" rows="10" ng-model="formData.content" placeholder="请填写发表内容..." required></textarea>
+                    <label ng-cloak for="inputError" class="control-label text-danger" ng-show="creatArticleForm.content.$invalid && !creatArticleForm.content.$pristine"><i class="glyphicon glyphicon-info-sign"></i>请填写正确的内容</label>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-1 col-sm-10 ">
+                    <button class="btn btn-info">提交</button>
+                </div>
+            </div>
+        </form>
+    </section>
+    <section>
+        <%- include rightmain %>
+    </section>
+</div>
+<script>
+    var webApp = angular.module('webApp', []);
+    webApp.controller('creatArticleCtrl', function ($scope, $http) {
+        $scope.createArticle = true;
+        $scope.names = [{id:'share',name:'分享'},{id:'ask',name:'问答'}];
+        $scope.formData = {};
+        $scope.formData.author = '<%= userInfo.userName %>';
+        $scope.formData.selectName = 'share';
+        $http.get('/users/userInfo?uid=' + '<%= userInfo._id %>')
+                .success(function(result){
+                    $scope.rightData = result;
+                });
+        $scope.creatArticleSub = function (isVaild) {
+            if ( isVaild ) {
+                //如果表单内容格式正确
+                $http({
+                    method: 'POST',
+                    url: '/users/creatArticle',
+                    data: $.param($scope.formData),
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                }).success(function (data) {
+                    if (data === 'success') {
+                        alert('发表成功');
+                        window.location = '/';
+                    } else {
+                        $('#errorInfo').removeClass('hide').text(data);
+                    }
+                })
+            } else {
+                alert('输入有误！');
+            }
+        }
+    })
+</script>

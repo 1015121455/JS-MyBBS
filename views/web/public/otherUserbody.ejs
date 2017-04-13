@@ -1,0 +1,84 @@
+<div class="leftbody" ng-controller="otherUserCtrl">
+    <section class="col-md-8 col-sm-12 col-xs-12 otherUser">
+        <main class="otherUserMessage" ng-cloak>
+            <!--用户信息-->
+            <h3><a href="/">主页</a> /</h3>
+            <div>
+                <img style="width: 100px;height:100px;" ng-src="{{ userData.logo }}" alt="用户头像">&nbsp;<span>{{ userData.userName }}</span>
+                <h4>{{ userData.jifen }}积分</h4>
+                <h4 style="color: #778087">{{ articleData.length }}个话题</h4>
+                <p class="text-muted" ng-show="userData.website"><i class="glyphicon glyphicon-globe"></i> {{userData.website}}</p>
+                <p class="text-muted" ng-show="userData.city"><i class="glyphicon glyphicon-map-marker"></i> {{userData.city}}</p>
+                <p class="text-muted" ng-show="userData.qq"><i class="glyphicon glyphicon-comment"></i> qq:{{userData.qq}}</p>
+                <p class="text-muted">注册时间  {{ userData.date }}</p>
+            </div>
+        </main>
+        <main class="otherUserArticle" ng-show="articleData.length" ng-cloak>
+            <!--显示最近创建的话题部分-->
+            <h3>最近创建的话题</h3>
+            <div class="articleList" ng-cloak ng-repeat=" data in articleData">
+                <a href="/users/otherUser?author={{ data.author }}"><img ng-src="{{ userData.logo }}" width="30px" height="30px"></a>
+                <span class="numBar"><span class="text-primary">{{ data.comments.length }}</span>/<span class="text-muted">{{ data.pv }}</span></span>
+                <a href="/users/articleContent?_id={{ data._id }}">{{ data.title }}</a>
+                <a href="/users/otherUser?author={{ data.comments[data.comments.length-1].users.userName }}" style="float: right"><img ng-show="data.comments.length" ng-src="{{ data.comments[data.comments.length-1].users.logo }}" width="20px" height="20px">&#x3000;{{ data.comments[data.comments.length-1].date }}</a>
+                <div class="clear"></div>
+            </div>
+        </main>
+        <main class="joinArticle" ng-show="joinData.length" ng-cloak>
+            <!--显示最近参与的话题部分-->
+            <h3>最近参与的话题</h3>
+            <div class="articleList" ng-cloak ng-repeat=" jdata in joinData">
+                <a href="/users/otherUser?author={{ jdata.author }}"><img ng-src="{{ jdata.users.logo }}" width="30px" height="30px"></a>
+                <span class="numBar"><span class="text-primary">{{ jdata.comments.length }}</span>/<span class="text-muted">{{ jdata.pv }}</span></span>
+                <a href="/users/articleContent?_id={{ jdata._id }}">{{ jdata.title }}</a>
+                <a href="/users/otherUser?author={{ jdata.comments[jdata.comments.length-1].users.userName }}" style="float: right"><img ng-show="jdata.comments.length" ng-src="{{ jdata.comments[jdata.comments.length-1].users.logo }}" width="20px" height="20px">&#x3000;{{ jdata.comments[jdata.comments.length-1].date }}</a>
+                <div class="clear"></div>
+            </div>
+        </main>
+    </section>
+
+
+    <section>
+        <%- include rightOtherUser %>
+    </section>
+</div>
+<script>
+    var webApp = angular.module('webApp',[]);
+    webApp.controller('otherUserCtrl',function ($scope,$http) {
+        //打开用户详情页面
+        $http({
+            method:'GET',
+            url:'/users/otherUserInfo?author=' + '<%= otherUserAuthor %>',
+        }).success(function (data) {
+            if(data === 'error') {
+                alert('没有找到该用户');
+                window.location = '/';
+            } else {
+                $scope.userData = data;
+            }
+        });
+        $http({
+            method:'GET',
+            url:'/users/otherArticleInfo?author=' + '<%= otherUserAuthor %>',
+        }).success(function (data) {
+            if(data === 'error') {
+                alert('没有找到该用户');
+                window.location = '/';
+            } else {
+                $scope.articleData = data;
+            }
+        });
+        $http({
+            method:'GET',
+            url:'/users/otherJoinInfo?author=' + '<%= otherUserAuthor %>',
+        }).success(function (data) {
+            if(data === 'error') {
+                alert('没有找到该用户');
+                window.location = '/';
+            } else {
+                $scope.joinData = data;
+            }
+        });
+
+    })
+</script>

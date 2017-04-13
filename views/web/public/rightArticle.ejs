@@ -1,0 +1,31 @@
+<div class="rightmain" ng-cloak>
+    <h3>作者</h3>
+    <a href="/users/otherUser?author={{ userData.userName }}"><img style="width: 50px;height: 50px;" ng-src="{{ userData.logo }}" alt="用户头像">&nbsp;{{ userData.userName }}</a>
+    <h4>积分：{{ userData.jifen }}</h4>
+    <h4>"{{ userData.motto }}"</h4>
+</div>
+<div class="rightmain">
+    <h3>作者的其他话题</h3>
+    <div ng-repeat="article in arData">
+        <a href="/users/articleContent?_id={{ article._id }}"><p>{{ article.title }}</p></a>
+    </div>
+    <div ng-show="arData.length == 0">无</div>
+</div>
+<% if(!logined) {%>
+<div class="rightmain">
+    <h3>关于</h3>
+    <h4>JS专业中文社区</h4>
+    <h4>在这里你可以：</h4>
+    <ul>
+        <li>向别人提出你遇到的问题</li>
+        <li>帮助遇到问题的人</li>
+        <li>分享自己的知识</li>
+        <li>和其它人一起进步</li>
+    </ul>
+</div>
+<%} else {%>
+<div class="rightmain" style="padding-bottom: 0;">
+    <a href="/users/creatArticle" class="btn btn-success" style="color: white">发布话题</a>
+</div>
+<%}%>
+

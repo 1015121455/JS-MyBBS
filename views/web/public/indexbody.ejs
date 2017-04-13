@@ -1,0 +1,175 @@
+<div class="leftbody" ng-controller="indexCtrl">
+    <section class="col-md-8 col-sm-12 col-xs-12">
+        <main>
+            <!--分类-->
+            <h3 id="selectName">
+                <a href="javascript:void(0);" class="active" ng-click="aClick('all',1)">全部</a>
+                <a href="javascript:void(0);" ng-click="aClick('share',1)">分享</a>
+                <a href="javascript:void(0);" ng-click="aClick('ask',1)">问答</a>
+            </h3>
+            <div class="articleList" ng-cloak ng-repeat="article in articles">
+                <a href="/users/otherUser?author={{ article.author }}"><img ng-src="{{ article.users.logo }}" width="30px" height="30px"></a>
+                <span class="numBar"><span class="text-primary">&#x3000;{{ article.comments.length }}</span>/<span class="text-muted">{{ article.pv }}&#x3000;</span></span>
+                <span class="selectBar">{{ article.selectName }}</span>
+                <a href="/users/articleContent?_id={{ article._id }}">{{ article.title }}</a>
+                <a href="/users/otherUser?author={{ article.comments[article.comments.length-1].users.userName }}" style="float: right; margin-top: 10px;"><img ng-show="article.comments.length" ng-src="{{ article.comments[article.comments.length-1].users.logo }}" width="20px" height="20px">&#x3000;{{ article.comments[article.comments.length-1].date }}</a>
+                <div class="clear"></div>
+            </div>
+            <!--分页部分-->
+            <div ng-cloak>
+                <ul class="pagination" id="paging" ng-show="hasPaging">
+                    <li><a href="javascript:void(0);" ng-click="aClick(tab,1)">&lt;&lt;</a></li>
+                    <li>
+                        <li ng-repeat="list in pageList"  class="pagingNum"><a href="javascript:void(0);" ng-click="aClick(tab,list)" >{{ list }}</a></li>
+                    </li>
+                    <li><a href="javascript:void(0);" ng-click="aClick(tab,counts)" >&gt;&gt;</a></li>
+                </ul>
+            </div>
+        </main>
+    </section>
+    <section>
+        <%- include rightmain%>
+    </section>
+</div>
+<div class="back-to-top"><i class="glyphicon glyphicon-chevron-up"></i></div>
+<script>
+
+    var webApp = angular.module('webApp',[]);
+    webApp.controller('indexCtrl',function ($scope,$http) {
+        //首页的积分榜 top10 用户
+        $http({
+            method:'GET',
+            url:'/top10'
+        }).success(function (data) {
+            $scope.tops = data;
+        });
+        //查询用户的信息
+        $http.get('/users/userInfo?uid=' + '<%= userInfoId %>')
+                .success(function(result){
+                    $scope.rightData = result;
+                });
+        //打开首页后，先发送一个tab=all的get请求
+        $http({
+            method:'GET',
+            url:'/tab?tab=all&p=1',
+        }).success(function (data) {
+            //打开首页后，先发送一个tab=all的get请求
+            //当前页
+            $scope.page = 1;
+            //当前类型
+            $scope.tab = 'all';
+            //每页数量
+            $scope.pageSize = 20;
+            data.forEach(function (art) {
+                if(art.selectName === 'share'){
+                    art.selectName = '分享'
+                } else if(art.selectName === 'ask'){
+                    art.selectName = '问答'
+                }
+            })
+            $scope.articles = data;
+            $scope.allLength = $scope.articles.pop();
+
+            //获取总页数
+            if($scope.allLength % $scope.pageSize ==0){
+                $scope.counts = parseInt($scope.allLength/$scope.pageSize);
+            }else{
+                $scope.counts = parseInt($scope.allLength/$scope.pageSize)+1;
+            }
+            //判断是否需要分页
+            if($scope.counts<=1){$scope.hasPaging = false}else {$scope.hasPaging = true};
+            //把需要显示的页码push到一个数组中
+            $scope.pageList = [];
+            if ($scope.counts>5) {
+                if ($scope.page<=3) {
+                    for(var i=0;i<5;i++){
+                        $scope.pageList.push(i+1);
+                    }
+                } else if(($scope.counts-$scope.page)<3) {
+                    for(var i=$scope.counts-5;i<$scope.counts;i++){
+                        $scope.pageList.push(i+1);
+                    }
+                } else {
+                    for(var i=$scope.page-3;i<$scope.page+2;i++){
+                        $scope.pageList.push(i+1);
+                    }
+                }
+            } else {
+                for(var i=0;i<$scope.counts;i++){
+                    $scope.pageList.push(i+1);
+                }
+            }
+        });
+
+
+        $scope.aClick = function (tab,page) {
+            $scope.tab = tab;
+            $scope.page = page;
+            //alert(1);
+            $http({
+                method:'GET',
+                url:'/tab?tab=' + tab + '&p=' + page,
+            }).success(function (data) {
+                data.forEach(function (art) {
+                    if(art.selectName === 'share'){
+                        art.selectName = '分享'
+                    } else if(art.selectName === 'ask'){
+                        art.selectName = '问答'
+                    }
+                })
+                $scope.articles = data;
+                $scope.allLength = $scope.articles.pop();
+
+                //获取总页数
+                if($scope.allLength % $scope.pageSize ==0){
+                    $scope.counts = parseInt($scope.allLength/$scope.pageSize);
+                }else{
+                    $scope.counts = parseInt($scope.allLength/$scope.pageSize)+1;
+                }
+                //判断是否需要分页
+                if($scope.counts<=1){$scope.hasPaging = false}else {$scope.hasPaging = true};
+                //把需要显示的页码push到一个数组中
+                $scope.pageList = [];
+                if ($scope.counts>5) {
+                    if ($scope.page<=3) {
+                        for(var i=0;i<5;i++){
+                            $scope.pageList.push(i+1);
+                        }
+                    } else if(($scope.counts-$scope.page)<3) {
+                        for(var i=$scope.counts-5;i<$scope.counts;i++){
+                            $scope.pageList.push(i+1);
+                        }
+                    } else {
+                        for(var i=$scope.page-3;i<$scope.page+2;i++){
+                            $scope.pageList.push(i+1);
+                        }
+                    }
+                } else {
+                    for(var i=0;i<$scope.counts;i++){
+                        $scope.pageList.push(i+1);
+                    }
+                }
+            })
+        };
+    })
+    $(function () {
+        $('#selectName a').click(function () {
+            $(this).addClass('active').siblings().removeClass('active');
+        });
+
+        var $backToTop = $(".back-to-top");
+        /* 隐藏回顶部按钮 */
+        $backToTop.hide();
+        $(window).on('scroll', function() {
+            if ($(this).scrollTop() > 100) { /* 返回顶部按钮将在用户向下滚动100像素后出现 */
+                $backToTop.fadeIn(500);
+            } else {
+                $backToTop.fadeOut(500);
+            }
+        });
+        $backToTop.on('click', function(e) {
+            $("html, body").animate({scrollTop: 0}, 300);
+        });
+
+    });
+</script>
