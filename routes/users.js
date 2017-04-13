@@ -385,6 +385,7 @@ var returnUserRouter = function(io){
                 title:'文章详情',
                 logined:req.session.logined,
                 userInfo:req.session.user,
+                auth:req.session.user.auth,
                 userName:req.session.user.userName,
                 articleId:currentId,
                 contents:contents

@@ -217,6 +217,9 @@ img{
     margin-bottom:0px;
 }
 /*修改和删除按钮*/
+#settingBar{
+    margin: 10px;
+}
 #settingBar a{
     padding-top:10px;
     margin: 10px;

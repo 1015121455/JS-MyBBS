@@ -10,7 +10,7 @@
                 <li>来自 {{ articles.selectName }}</li>
                 <div class="clear"></div>
                 <%if(userInfo){%>
-                <div id="settingBar" ng-show="(articles.author == userName)">
+                <div id="settingBar" ng-show="(articles.author == userName || auth == 'A')">
                     <a href="/users/updateArticle?_id=<%= articleId %>" title="修改"><span class="glyphicon glyphicon-edit"></span></a>
                     <a href="#" title="删除" ng-click="deleteFun()" ><span class="glyphicon glyphicon-trash"></span></a>
                 </div>
@@ -65,6 +65,7 @@
     }]);
     webApp.controller('articleCtrl',function ($scope,$http) {
         $scope.userName = '<%= userName %>';
+        $scope.auth = '<%= auth %>'
         //$scope.formData = {};
         //打开文章详情页面
         $http({

@@ -21,6 +21,7 @@ var UserSchema = new Schema({
         unique:true,
         default:shortid.generate
     },
+    auth:{type:String,default:'C'},
     name:{type:String,default:''},
     userName:{type:String,default:''},
     password:{type:String,default:''},
