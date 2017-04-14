@@ -67,7 +67,7 @@ var returnUserRouter = function(io){
             errors = "6-16位，只能包含字母数字下划线";
         }
         if(password != confirmPsd){
-            errors = "密码不匹配，请重新输入";
+            errors = "两次密码不匹配，请重新输入";
         }
         if(!validator.isEmail(email)){
             errors = "请输入正确的邮箱地址";
@@ -376,31 +376,22 @@ var returnUserRouter = function(io){
     /*=============文章详情模块============*/
     //文章详情页面，
     router.get('/articleContent',function (req,res,next) {
+        var user = req.session.user;
         var params = url.parse(req.url,true);
         var currentId = params.query._id;
         var errors;
         var contents;
-        if (isLogin(req)) {
-            res.render('web/article',{
-                title:'文章详情',
-                logined:req.session.logined,
-                userInfo:req.session.user,
-                auth:req.session.user.auth,
-                userName:req.session.user.userName,
-                articleId:currentId,
-                contents:contents
-            })
-        } else {
-            res.render('web/article',{
-                title:'文章详情',
-                logined:req.session.logined,
-                userInfo:req.session.user,
-                userName:null,
-                articleId:currentId,
-                contents:contents
-            })
-        }
-
+        var auth = isLogin(req) ? user.auth : 'C';
+        var userName = isLogin(req) ? user.userName : null;
+        res.render('web/article',{
+            title:'文章详情',
+            logined:req.session.logined,
+            userInfo:req.session.user,
+            auth:auth,
+            userName:userName,
+            articleId:currentId,
+            contents:contents
+        })
     })
     //通过路由状态的ID获取文章信息
     router.get('/articleInfo',function (req,res,next) {
