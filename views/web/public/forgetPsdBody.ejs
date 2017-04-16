@@ -19,7 +19,7 @@
             <div class="form-group">
                 <label for="newPassword" class="col-sm-2 control-label">新密码</label>
                 <div class="col-sm-6">
-                    <input type="password" class="form-control" id="newPassword" name="newPassword"placeholder="请输入新密码" ng-pattern="/[?!a-zA-Z0-9_]{6,16}/" ng-maxlength="16" ng-model="rePsdFormData.newPassword" required>
+                    <input type="password" class="form-control" id="newPassword" name="newPassword"placeholder="请输入新密码" ng-pattern="/^[?!a-zA-Z0-9_]{6,16}$/" ng-maxlength="16" ng-model="rePsdFormData.newPassword" required>
                     <label ng-cloak for="inputError" class="control-label text-danger" ng-show="rePsdForm.newPassword.$invalid && !rePsdForm.newPassword.$pristine"><i class="glyphicon glyphicon-exclamation-sign"></i>6-16位，只能包含字母数字下划线</label>
                 </div>
             </div>
@@ -39,21 +39,29 @@
     webApp.controller('forgetPsdCtrl',function ($scope,$http) {
         $scope.rePsdFormSub = function (isVaild) {
             if(isVaild){
-                //如果表单内容格式正确
-                $http({
-                    method:'POST',
-                    url:'/users/getPsd',
-                    data:$.param($scope.rePsdFormData),
-                    headers:{'Content-Type':'application/x-www-form-urlencoded'}
-                }).success(function (data) {
-                    console.log(data);
-                    if(data === 'success'){
-                        alert('密码修改成功,现在可以登录');
-                        window.location = '/users/login';
-                    } else {
-                        $('#errorPsd').removeClass('hide').text(data);
-                    }
-                })
+                var reg=/'|"|;|>|<|\/|\\|\?|%|\(|\)/gi;
+                var userName = reg.test($scope.rePsdFormData.userName);
+                var email = reg.test($scope.rePsdFormData.email);
+                var newPassword = reg.test($scope.rePsdFormData.newPassword);
+                if(userName || email || newPassword) {
+                    alert("内容中含有非法字符，请重新输入");
+                } else {
+                    //如果表单内容格式正确
+                    $http({
+                        method:'POST',
+                        url:'/users/getPsd',
+                        data:$.param($scope.rePsdFormData),
+                        headers:{'Content-Type':'application/x-www-form-urlencoded'}
+                    }).success(function (data) {
+                        console.log(data);
+                        if(data === 'success'){
+                            alert('密码修改成功,现在可以登录');
+                            window.location = '/users/login';
+                        } else {
+                            $('#errorPsd').removeClass('hide').text(data);
+                        }
+                    })
+                }
             } else {
                 alert('输入有误！');
             }

@@ -56,6 +56,29 @@
 
         $scope.updateArticleSub = function (isVaild) {
             if ( isVaild ) {
+                //对发表的的内容进行前端验证，对注入的特殊字符进行转义，防止sql注入
+                var reg=/['")(-><\/\.]/gi;
+                var title = reg.test($scope.upFormData.title);
+                var content = reg.test($scope.upFormData.content);
+                function checkData(v) {
+                    var  entry = {
+                        "'":"&apos;",
+                        '"':'&quot;',
+                        '<':'&lt;',
+                        '>':'&gt;',
+                        '/':'\/',
+                        ')':'\\)',
+                        '(':'\\(',
+                        '.':'\.',
+                        ' ':'&nbsp;'
+                    };
+                    v = v.replace(/['")(-><&\/\.\ ]/gi, function ($0) { return entry[$0] || $0; });
+                    return v;
+                }
+                if(title || content) {
+                    $scope.upFormData.title = checkData($scope.upFormData.title);
+                    $scope.upFormData.content = checkData($scope.upFormData.content);
+                }
                 //如果表单内容格式正确
                 $http({
                     method: 'POST',

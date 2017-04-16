@@ -131,7 +131,6 @@ var returnUserRouter = function(io){
                 if(user){
                     //将cookie存入缓存
                     filter.gen_session(user,res);
-                    //console.log(user);
                     res.end('success');
                 } else {
                     res.end('用户名或者密码错误!');
@@ -166,7 +165,7 @@ var returnUserRouter = function(io){
         if(shortid.isValid(currentId)){
             User.findOne({_id:currentId},function (err,result) {
                 if(err){
-                    console.log(err);
+                    //console.log(err);
                 } else {
                     return res.json(result);
                 }
@@ -201,7 +200,6 @@ var returnUserRouter = function(io){
                 if(user){
                     req.session.user = null;
                     res.end('success');
-                    //console.log(req.session);
                 } else {
                     res.end('用户名或者密码错误!');
                 }
@@ -342,15 +340,10 @@ var returnUserRouter = function(io){
         var selectName = req.body.selectName;
         var title = req.body.title;
         var content = req.body.content;
-        //再次在后台验证表单数据的正确
-        if(!validator.isLength(title,10,30)){
-            errors = '标题字数必须在10-30之间'
-        }
         if(errors){
             res.end(errors);
         } else {
             req.body.users = req.session.user;
-            console.log(req.body);
             var newObj = new Article(req.body);
             newObj.save(function(err){
                 if(err){
@@ -366,11 +359,6 @@ var returnUserRouter = function(io){
                     })
                 }
             })
-        
-            /*Article.create(req.body,function (article) {
-                console.log(article);
-            })
-            res.end('success');*/
         }
     });
     /*=============文章详情模块============*/
@@ -405,9 +393,16 @@ var returnUserRouter = function(io){
                     Article.findByIdAndUpdate(currentId,{$set:{pv:result.pv + 1}},function (err,upResult) {
 
                         if(result){
-                            result.content = markdown.toHTML(result.content);
+                            function checkData(v) {
+                                var  entry = { "&apos;":"'",'&quot;':'"','&lt;':'<', '&gt;':'>','&nbsp;':' '};
+                                v = v.replace(/&apos;|&quot;|&lt;|&gt;|&nbsp;/gi, function ($0) { return entry[$0] || $0; });
+                                return v;
+                            }
+                            result.content = markdown.toHTML(checkData(result.content));
+
                             result.comments.forEach(function (comment) {
-                                comment.content = markdown.toHTML(comment.content);
+                                comment.content = markdown.toHTML(checkData(comment.content));
+                                console.log(comment.content);
                             })
                             return res.json(result);
                         } else {
@@ -513,10 +508,6 @@ var returnUserRouter = function(io){
                     if ( result ) {
                         Article.findOne({_id:articleId},function (err,resu) {
                             if(resu){
-                                resu.content = markdown.toHTML(resu.content);
-                                resu.comments.forEach(function (comment) {
-                                    comment.content = markdown.toHTML(comment.content);
-                                })
                                 return res.json(resu);
                             } else {
                                 return res.end('error');
@@ -548,10 +539,6 @@ var returnUserRouter = function(io){
                     if ( result ) {
                         Article.findOne({_id:articleId},function (err,resu) {
                             if(resu){
-                                resu.content = markdown.toHTML(resu.content);
-                                resu.comments.forEach(function (comment) {
-                                    comment.content = markdown.toHTML(comment.content);
-                                })
                                 return res.json(resu);
                             } else {
                                 return res.end('error');
@@ -569,7 +556,6 @@ var returnUserRouter = function(io){
     router.get('/otherUser',function (req,res,next) {
         var params = url.parse(req.url,true);
         var currentAuthor = params.query.author;
-        //console.log(currentAuthor);
         res.render('web/otherUser',{
             title:'用户信息详情',
             logined:req.session.logined,
@@ -650,6 +636,13 @@ var returnUserRouter = function(io){
                 return res.end('error');
             } else {
                 if(result){
+                    function checkData(v) {
+                        var  entry = { "&apos;":"'",'&quot;':'"','&lt;':'<', '&gt;':'>','&nbsp;':' '};
+                        v = v.replace(/&apos;|&quot;|&lt;|&gt;|&nbsp;/gi, function ($0) { return entry[$0] || $0; });
+                        return v;
+                    }
+                    result.content = checkData(result.content);
+                    result.title = checkData(result.title);
                     return res.json(result);
                 } else {
                     return res.end('error');
@@ -664,10 +657,6 @@ var returnUserRouter = function(io){
         var selectName = req.body.selectName;
         var title = req.body.title;
         var content = req.body.content;
-        //再次在后台验证表单数据的正确
-        if(!validator.isLength(title,10,30)){
-            errors = '标题字数必须在10-30之间'
-        }
         if(errors){
             res.end(errors);
         } else {
