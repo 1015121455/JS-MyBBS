@@ -2,7 +2,7 @@
     <section class="col-md-8 col-sm-12 col-xs-12 articleContent">
         <div class="articleTitle" ng-cloak>
             <!--文章标题和内容部分-->
-            <h2 ng-bind-html="articles.title | to_trusted"></h2>
+            <h2>{{ articles.title }}</h2>
             <ul>
                 <li>发布于{{ articles.date }}</li>
                 <li>作者 {{ articles.author }}</li>
@@ -73,7 +73,7 @@
             return $sce.trustAsHtml(text);
         };
     }]);
-    webApp.controller('articleCtrl', function ($scope, $http) {
+    webApp.controller('articleCtrl', function ($scope, $http){
         $scope.userName = '<%= userName %>';
         $scope.auth = '<%= auth %>'
         //$scope.formData = {};
@@ -108,34 +108,33 @@
 
                         })
                     });
-                    $scope.doZan = function (no) {
-                        $http.get('/users/zan?_id=' + '<%= articleId %>' + '&zanUser=' + $scope.userName + '&no=' + no + '&isZan=' + $scope.isZan[no])
-                                .success(function (ddd) {
-                                    if (ddd === 'error') {
-                                        alert('点赞失败');
-                                    } else {
-                                        if (ddd.selectName === 'share') {
-                                            ddd.selectName = '分享'
-                                        } else if (ddd.selectName === 'ask') {
-                                            ddd.selectName = '问答'
-                                        }
-                                        $scope.articles = ddd;
-                                        $scope.articles.comments[no].zanUser.forEach(function (user) {
-                                            if (user == $scope.userName) {
-                                                $scope.isZan[no] = '1';
-                                                return;
-                                            } else {
-                                                $scope.isZan[no] = '0';
-                                            }
-                                            return;
-                                        });
-                                    }
-
-                                })
-                    }
                 }
             }
         });
+        $scope.doZan = function (no) {
+            $http.get('/users/zan?_id=' + '<%= articleId %>' + '&zanUser=' + $scope.userName + '&no=' + no + '&isZan=' + $scope.isZan[no])
+                    .success(function (ddd) {
+                        if (ddd === 'error') {
+                            alert('点赞失败');
+                        } else {
+                            if (ddd.selectName === 'share') {
+                                ddd.selectName = '分享'
+                            } else if (ddd.selectName === 'ask') {
+                                ddd.selectName = '问答'
+                            }
+                            $scope.articles = ddd;
+                            $scope.articles.comments[no].zanUser.forEach(function (user) {
+                                if (user == $scope.userName) {
+                                    $scope.isZan[no] = '1';
+                                    return;
+                                } else {
+                                    $scope.isZan[no] = '0';
+                                }
+                                return;
+                            });
+                        }
+                    })
+        }
         $http({
             method: 'GET',
             url: '/users/authorInfo?_id=' + '<%= articleId %>',
@@ -217,6 +216,7 @@
                 }).success(function (data) {
                     if (data === 'success') {
                         $scope.formData.comments = '';
+                        alert('留言成功！');
                         $http({
                             method: 'GET',
                             url: '/users/articleInfo?_id=' + '<%= articleId %>',
@@ -247,8 +247,6 @@
             }
         };
     });
-
-
     $(function () {
         var $backToTop = $(".back-to-top");
         /* 隐藏回顶部按钮 */

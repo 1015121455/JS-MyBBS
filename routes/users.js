@@ -391,7 +391,6 @@ var returnUserRouter = function(io){
                     return res.end('error');
                 } else {
                     Article.findByIdAndUpdate(currentId,{$set:{pv:result.pv + 1}},function (err,upResult) {
-
                         if(result){
                             function checkData(v) {
                                 var  entry = { "&apos;":"'",'&quot;':'"','&lt;':'<', '&gt;':'>','&nbsp;':' '};
@@ -402,7 +401,6 @@ var returnUserRouter = function(io){
 
                             result.comments.forEach(function (comment) {
                                 comment.content = markdown.toHTML(checkData(comment.content));
-                                console.log(comment.content);
                             })
                             return res.json(result);
                         } else {
@@ -508,6 +506,16 @@ var returnUserRouter = function(io){
                     if ( result ) {
                         Article.findOne({_id:articleId},function (err,resu) {
                             if(resu){
+                                function checkData(v) {
+                                    var  entry = { "&apos;":"'",'&quot;':'"','&lt;':'<', '&gt;':'>','&nbsp;':' '};
+                                    v = v.replace(/&apos;|&quot;|&lt;|&gt;|&nbsp;/gi, function ($0) { return entry[$0] || $0; });
+                                    return v;
+                                }
+                                resu.content = markdown.toHTML(checkData(resu.content));
+
+                                resu.comments.forEach(function (comment) {
+                                    comment.content = markdown.toHTML(checkData(comment.content));
+                                })
                                 return res.json(resu);
                             } else {
                                 return res.end('error');
@@ -539,6 +547,16 @@ var returnUserRouter = function(io){
                     if ( result ) {
                         Article.findOne({_id:articleId},function (err,resu) {
                             if(resu){
+                                function checkData(v) {
+                                    var  entry = { "&apos;":"'",'&quot;':'"','&lt;':'<', '&gt;':'>','&nbsp;':' '};
+                                    v = v.replace(/&apos;|&quot;|&lt;|&gt;|&nbsp;/gi, function ($0) { return entry[$0] || $0; });
+                                    return v;
+                                }
+                                resu.content = markdown.toHTML(checkData(resu.content));
+
+                                resu.comments.forEach(function (comment) {
+                                    comment.content = markdown.toHTML(checkData(comment.content));
+                                })
                                 return res.json(resu);
                             } else {
                                 return res.end('error');

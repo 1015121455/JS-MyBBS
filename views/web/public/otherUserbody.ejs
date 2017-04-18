@@ -19,7 +19,7 @@
             <div class="articleList" ng-cloak ng-repeat=" data in articleData">
                 <a href="/users/otherUser?author={{ data.author }}"><img ng-src="{{ userData.logo }}" width="30px" height="30px"></a>
                 <span class="numBar"><span class="text-primary">{{ data.comments.length }}</span>/<span class="text-muted">{{ data.pv }}</span></span>
-                <a href="/users/articleContent?_id={{ data._id }}">{{ data.title }}</a>
+                <a href="/users/articleContent?_id={{ data._id }}" ng-bind-html="data.title | to_trusted" ></a>
                 <a href="/users/otherUser?author={{ data.comments[data.comments.length-1].users.userName }}" style="float: right"><img ng-show="data.comments.length" ng-src="{{ data.comments[data.comments.length-1].users.logo }}" width="20px" height="20px">&#x3000;{{ data.comments[data.comments.length-1].date }}</a>
                 <div class="clear"></div>
             </div>
@@ -30,7 +30,7 @@
             <div class="articleList" ng-cloak ng-repeat=" jdata in joinData">
                 <a href="/users/otherUser?author={{ jdata.author }}"><img ng-src="{{ jdata.users.logo }}" width="30px" height="30px"></a>
                 <span class="numBar"><span class="text-primary">{{ jdata.comments.length }}</span>/<span class="text-muted">{{ jdata.pv }}</span></span>
-                <a href="/users/articleContent?_id={{ jdata._id }}">{{ jdata.title }}</a>
+                <a href="/users/articleContent?_id={{ jdata._id }}" ng-bind-html="data.title | to_trusted" ></a>
                 <a href="/users/otherUser?author={{ jdata.comments[jdata.comments.length-1].users.userName }}" style="float: right"><img ng-show="jdata.comments.length" ng-src="{{ jdata.comments[jdata.comments.length-1].users.logo }}" width="20px" height="20px">&#x3000;{{ jdata.comments[jdata.comments.length-1].date }}</a>
                 <div class="clear"></div>
             </div>
@@ -44,6 +44,12 @@
 </div>
 <script>
     var webApp = angular.module('webApp',[]);
+    //让angular可以解析html代码的过滤器
+    webApp.filter('to_trusted', ['$sce', function ($sce) {
+        return function (text) {
+            return $sce.trustAsHtml(text);
+        };
+    }]);
     webApp.controller('otherUserCtrl',function ($scope,$http) {
         //打开用户详情页面
         $http({
