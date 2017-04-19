@@ -56,10 +56,11 @@
 
         $scope.updateArticleSub = function (isVaild) {
             if ( isVaild ) {
+                $scope.myFormData = angular.copy($scope.upFormData);
                 //对发表的的内容进行前端验证，对注入的特殊字符进行转义，防止sql注入
                 var reg=/['")(-><\/\.]/gi;
-                var title = reg.test($scope.upFormData.title);
-                var content = reg.test($scope.upFormData.content);
+                var title = reg.test($scope.myFormData.title);
+                var content = reg.test($scope.myFormData.content);
                 function checkData(v) {
                     var  entry = {
                         "'":"&apos;",
@@ -76,14 +77,14 @@
                     return v;
                 }
                 if(title || content) {
-                    $scope.upFormData.title = checkData($scope.upFormData.title);
-                    $scope.upFormData.content = checkData($scope.upFormData.content);
+                    $scope.myFormData.title = checkData($scope.myFormData.title);
+                    $scope.myFormData.content = checkData($scope.myFormData.content);
                 }
                 //如果表单内容格式正确
                 $http({
                     method: 'POST',
                     url: '/users/updateArticle',
-                    data: $.param($scope.upFormData),
+                    data: $.param($scope.myFormData),
                     headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                 }).success(function (data) {
                     if (data === 'success') {

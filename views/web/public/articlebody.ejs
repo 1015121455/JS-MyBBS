@@ -73,7 +73,7 @@
             return $sce.trustAsHtml(text);
         };
     }]);
-    webApp.controller('articleCtrl', function ($scope, $http){
+    webApp.controller('articleCtrl', function ($scope, $http,$timeout){
         $scope.userName = '<%= userName %>';
         $scope.auth = '<%= auth %>'
         //$scope.formData = {};
@@ -184,9 +184,10 @@
 
         $scope.addComments = function (isVaild) {
             if (isVaild) {
+                $scope.myformData = angular.copy($scope.formData);
                 //对评论的内容进行前端验证，对注入的特殊字符进行转义，防止sql注入
                 var reg=/['")(-><\/\.]/gi;
-                var comments = reg.test($scope.formData.comments);
+                var comments = reg.test($scope.myformData.comments);
                 function checkData(v) {
                     var  entry = {
                         "'":"&apos;",
@@ -203,20 +204,21 @@
                     return v;
                 }
                 if(comments) {
-                    $scope.formData.comments = checkData($scope.formData.comments);
+                    $scope.myformData.comments = checkData($scope.myformData.comments);
                 }
                 //如果表单内容格式正确
-                $scope.formData._id = '<%= articleId %>';
-                //console.log($.param($scope.formData));
+                $scope.myformData._id = '<%= articleId %>';
                 $http({
                     method: 'POST',
                     url: '/users/addComments',
-                    data: $.param($scope.formData),
+                    data: $.param($scope.myformData),
                     headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                 }).success(function (data) {
+                    $scope.formData.comments = '';
                     if (data === 'success') {
-                        $scope.formData.comments = '';
-                        alert('留言成功！');
+                        $timeout(function () {
+                            alert('留言成功！');
+                        })
                         $http({
                             method: 'GET',
                             url: '/users/articleInfo?_id=' + '<%= articleId %>',

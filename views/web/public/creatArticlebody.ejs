@@ -45,10 +45,11 @@
                 });
         $scope.creatArticleSub = function (isVaild) {
             if ( isVaild ) {
+                $scope.iformData = angular.copy($scope.formData);
                 //对发表的的内容进行前端验证，对注入的特殊字符进行转义，防止sql注入
                 var reg=/['")(-><\/\.]/gi;
-                var title = reg.test($scope.formData.title);
-                var content = reg.test($scope.formData.content);
+                var title = reg.test($scope.iformData.title);
+                var content = reg.test($scope.iformData.content);
                 function checkData(v) {
                     var  entry = {
                         "'":"&apos;",
@@ -65,14 +66,14 @@
                     return v;
                 }
                 if(title || content) {
-                    $scope.formData.title = checkData($scope.formData.title);
-                    $scope.formData.content = checkData($scope.formData.content);
+                    $scope.iformData.title = checkData($scope.iformData.title);
+                    $scope.iformData.content = checkData($scope.iformData.content);
                 }
                 //如果表单内容格式正确
                 $http({
                     method: 'POST',
                     url: '/users/creatArticle',
-                    data: $.param($scope.formData),
+                    data: $.param($scope.iformData),
                     headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                 }).success(function (data) {
                     if (data === 'success') {
