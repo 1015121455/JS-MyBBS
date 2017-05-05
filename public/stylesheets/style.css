@@ -18,6 +18,9 @@ p{
 a{
     text-decoration: none;
 }
+ul,li{
+    overflow: hidden;
+}
 img{
     border-radius: 3px;
 }
@@ -149,7 +152,7 @@ img{
 .numBar{
     display: inline-block;
     text-align: center;
-    width: 60px;
+    width: 100px;
 }
 #com .zan{
     float: right;
@@ -193,13 +196,13 @@ img{
     padding: 20px;
     padding-bottom:0;
 }
-.articleTitle ul {
+.articleTitle>ul {
     margin: 0;
     padding:20px;
     color: #838383;
     border-bottom:1px solid #eee;
 }
-.articleTitle ul li{
+.articleTitle>ul li{
     float: left;
     margin:0 10px;
 }

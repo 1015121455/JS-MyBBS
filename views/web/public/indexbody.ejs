@@ -9,7 +9,7 @@
             </h3>
             <div class="articleList" ng-cloak ng-repeat="article in articles">
                 <a href="/users/otherUser?author={{ article.author }}"><img ng-src="{{ article.users.logo }}" width="30px" height="30px"></a>
-                <span class="numBar"><span class="text-primary">&#x3000;{{ article.comments.length }}</span>/<span class="text-muted">{{ article.pv }}&#x3000;</span></span>
+                <span class="numBar"><span class="text-primary" style="color: #9E78C0;">&#x3000;{{ article.comments.length }}</span>/<span class="text-muted" style="color: #B4B4B4;">{{ article.pv }}&#x3000;</span></span>
                 <span class="selectBar">{{ article.selectName }}</span>
                 <a href="/users/articleContent?_id={{ article._id }}" ng-bind-html="article.title | to_trusted"></a>
                 <a href="/users/otherUser?author={{ article.comments[article.comments.length-1].users.userName }}" style="float: right; margin-top: 10px;"><img ng-show="article.comments.length" ng-src="{{ article.comments[article.comments.length-1].users.logo }}" width="20px" height="20px">&#x3000;{{ article.comments[article.comments.length-1].date }}</a>

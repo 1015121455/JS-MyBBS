@@ -2,7 +2,7 @@
     <section class="col-md-8 col-sm-12 col-xs-12 articleContent">
         <div class="articleTitle" ng-cloak>
             <!--文章标题和内容部分-->
-            <h2>{{ articles.title }}</h2>
+            <h2 ng-bind-html="articles.title | to_trusted"></h2>
             <ul>
                 <li>发布于{{ articles.date }}</li>
                 <li>作者 {{ articles.author }}</li>
@@ -195,8 +195,8 @@
                         '<':'&lt;',
                         '>':'&gt;',
                         '/':'\/',
-                        ')':'\\)',
-                        '(':'\\(',
+                        ')':'\)',
+                        '(':'\(',
                         '.':'\.',
                         ' ':'&nbsp;'
                     };
